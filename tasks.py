@@ -6,14 +6,19 @@ import requests
 from flask import Flask, request, send_from_directory
 
 
+QUERY_URL = 'http://localhost:8080/query'
+
+
 app = Flask(__name__)
 site = Path('static')
 
 
 @app.route('/query', methods=['POST'])
 def query():
-    import random
-    return '%s %d' % (request.get_data().decode('utf8'), random.randint(1, 100))
+    query = request.get_data().decode('utf8')
+    res = requests.post(QUERY_URL, query)
+    nice_output = json.dumps(res.json(), indent=2)
+    return nice_output
 
 
 @app.route('/', defaults={'path': ''})
@@ -45,7 +50,7 @@ def db(ctx):
 @task
 def populate(ctx):
     with open('initial-data.txt') as fp:
-        res = requests.post('http://localhost:8080/query', fp.read())
+        res = requests.post(QUERY_URL, fp.read())
         print(res.json())
 
 

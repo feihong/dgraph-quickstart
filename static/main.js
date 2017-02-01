@@ -1,4 +1,6 @@
-$('textarea.query').focus()
+$(document).ready(() => {
+  $('textarea.query').focus()
+})
 
 $('textarea.query').on('keypress', evt => {
   if ((evt.metaKey || evt.ctrlKey) && evt.keyCode === 13) {
