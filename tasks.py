@@ -3,11 +3,17 @@ import json
 from pathlib import Path
 from invoke import task
 import requests
-from flask import Flask, send_from_directory
+from flask import Flask, request, send_from_directory
 
 
 app = Flask(__name__)
 site = Path('static')
+
+
+@app.route('/query', methods=['POST'])
+def query():
+    import random
+    return '%s %d' % (request.get_data().decode('utf8'), random.randint(1, 100))
 
 
 @app.route('/', defaults={'path': ''})
