@@ -1,0 +1,1 @@
+$('textarea.query').focus()

@@ -1,12 +1,34 @@
 import subprocess
 import json
+from pathlib import Path
 from invoke import task
 import requests
+from flask import Flask, send_from_directory
+
+
+app = Flask(__name__)
+site = Path('static')
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    filepath = site / path
+
+    if filepath.is_dir():
+        index_path = filepath / 'index.html'
+        if index_path.exists():
+            return send_from_directory(str(site), 'index.html')
+
+    if filepath.exists():
+        return send_from_directory(str(site), path)
+
+    return 'Page not found', 404
 
 
 @task
 def serve(ctx):
-    pass
+    app.run(port=8000)
 
 
 @task
