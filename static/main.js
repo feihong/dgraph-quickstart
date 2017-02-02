@@ -9,10 +9,11 @@ $('textarea.query').on('keypress', evt => {
 })
 
 let sendQuery = co.wrap(function *(query) {
-  let response = yield fetch('http://localhost:8000/query', {
+  let response = yield fetch('http://localhost:8080/query', {
     method: 'POST',
     body: query,
   })
-  let text = yield response.text()
+  let result = yield response.json()
+  let text = JSON.stringify(result, null, 2)
   $('textarea.result').text(text)
 })

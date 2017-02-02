@@ -1,24 +1,16 @@
 import subprocess
+import signal
 import json
 from pathlib import Path
+import contextlib
+
 from invoke import task
 import requests
 from flask import Flask, request, send_from_directory
 
 
-QUERY_URL = 'http://localhost:8080/query'
-
-
 app = Flask(__name__)
 site = Path('static')
-
-
-@app.route('/query', methods=['POST'])
-def query():
-    query = request.get_data().decode('utf8')
-    res = requests.post(QUERY_URL, query)
-    nice_output = json.dumps(res.json(), indent=2)
-    return nice_output
 
 
 @app.route('/', defaults={'path': ''})
