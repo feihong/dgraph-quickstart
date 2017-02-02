@@ -1,2 +1,8 @@
+.DS_Store
+
+# Dgraph data files:
 p/
 w/
+
+data/*.schema
+data/*.gz
