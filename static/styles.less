@@ -24,8 +24,11 @@ html, body {
     flex: 1;
     padding: 0.5rem 1rem;
     font-family: monospace;
-  }
-  textarea.result {
-    background-color: lavender;
+    &.result {
+      background-color: lavender;
+      &.error {
+        color: red;
+      }
+    }
   }
 }

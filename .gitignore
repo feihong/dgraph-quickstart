@@ -4,5 +4,6 @@
 p/
 w/
 
+data/*.rdf
 data/*.schema
 data/*.gz
