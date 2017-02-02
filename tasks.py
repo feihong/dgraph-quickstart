@@ -5,14 +5,13 @@ from pathlib import Path
 import contextlib
 
 from invoke import task
-import requests
 from flask import Flask, request, send_from_directory
 
 
 EXAMPLE_DATA_URLS = """\
-https://github.com/dgraph-io/benchmarks/blob/master/data/21million.rdf.gz
-https://github.com/dgraph-io/benchmarks/blob/master/data/sf.tourism.gz
-https://github.com/dgraph-io/benchmarks/blob/master/data/21million.schema""".splitlines()
+https://github.com/dgraph-io/benchmarks/raw/master/data/21million.rdf.gz
+https://github.com/dgraph-io/benchmarks/raw/master/data/sf.tourism.gz
+https://github.com/dgraph-io/benchmarks/raw/master/data/21million.schema""".splitlines()
 
 
 app = Flask(__name__)
@@ -54,6 +53,13 @@ def download_example_data(ctx):
 
 
 @task
+def load_example_data(ctx):
+    """Load the example data. Will take a while."""
+    cmd = 'dgraphloader -r data/21million.rdf.gz,data/sf.tourism.gz'
+    subprocess.call(cmd, shell=True)
+
+
+@task
 def populate(ctx):
     with open('initial-data.txt') as fp:
         res = requests.post(QUERY_URL, fp.read())
@@ -61,4 +67,4 @@ def populate(ctx):
 
 
 def start_dgraph():
-    subprocess.call('dgraph --schema demo.schema', shell=True)
+    subprocess.call('dgraph --schema data/21million.schema', shell=True)
