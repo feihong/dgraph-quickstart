@@ -8,10 +8,11 @@ from invoke import task
 from flask import Flask, request, send_from_directory
 
 
-EXAMPLE_DATA_URLS = """\
-https://github.com/dgraph-io/benchmarks/raw/master/data/21million.rdf.gz
+EXAMPLE_DATA_URLS = """
+https://github.com/dgraph-io/benchmarks/raw/master/data/goldendata.schema
+https://github.com/dgraph-io/benchmarks/raw/master/data/goldendata.rdf.gz
 https://github.com/dgraph-io/benchmarks/raw/master/data/sf.tourism.gz
-https://github.com/dgraph-io/benchmarks/raw/master/data/21million.schema""".splitlines()
+""".strip().splitlines()
 
 
 app = Flask(__name__)
@@ -55,7 +56,7 @@ def download_example_data(ctx):
 @task
 def load_example_data(ctx):
     """Load the example data. Will take a while."""
-    cmd = 'dgraphloader -r data/21million.rdf.gz,data/sf.tourism.gz'
+    cmd = 'dgraphloader -r data/goldendata.rdf.gz,data/sf.tourism.gz'
     subprocess.call(cmd, shell=True)
 
 
@@ -67,4 +68,4 @@ def populate(ctx):
 
 
 def start_dgraph():
-    subprocess.call('dgraph --schema data/21million.schema', shell=True)
+    subprocess.call('dgraph --schema data/goldendata.schema', shell=True)
