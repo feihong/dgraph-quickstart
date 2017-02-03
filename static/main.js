@@ -1,5 +1,4 @@
 // $(document).ready(() => {
-//   console.log('focus', $('textarea.query')[0])
 //   $('textarea.query')[0].focus()
 // })
 
@@ -21,7 +20,13 @@ let sendQuery = co.wrap(function *(query) {
   if (response.status !== 200) {
     resultTa.addClass('error').text(yield response.text())
   } else {
-    let text = JSON.stringify(yield response.json(), null, 2)
-    resultTa.text(text)
+    let responseText = yield response.text()
+    try {
+      let obj = JSON.parse(responseText)
+      let text = JSON.stringify(obj, null, 2)
+      resultTa.text(text)
+    } catch (err) {
+      resultTa.addClass('error').text(`${err}\n\n${responseText}`)
+    }
   }
 })
